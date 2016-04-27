@@ -8,7 +8,7 @@
 
 function_compiler()
 {
-$TTCN3_COMPILER -p ${ABS_SRC}/${1}.asn  2>> ERROR_file
+$TTCN3_COMPILER -p -h ${ABS_SRC}/${1}.asn  2>> ERROR_file
 
 if  
   $GREP -q Error ./ERROR_file   
@@ -26,11 +26,11 @@ echo "ASN1:$1 = Verdict: $Verdict"
 }
 
 function_compiler Test1
-function_compiler Test1_known_errors
+function_compiler Test1-known-errors
 function_compiler Test2
-function_compiler Test2_known_errors
+function_compiler Test2-known-errors
 function_compiler Test3
-function_compiler Test3_known_errors
+function_compiler Test3-known-errors
 function_compiler Test4
-function_compiler Test4_known_errors
+function_compiler Test4-known-errors
 

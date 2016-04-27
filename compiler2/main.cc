@@ -95,7 +95,7 @@ boolean generate_skeleton = FALSE, force_overwrite = FALSE,
   implicit_json_encoding = FALSE, json_refs_for_all_types = TRUE,
   force_gen_seof = FALSE, omit_in_value_list = FALSE,
   warnings_for_bad_variants = FALSE, debugger_active = FALSE,
-  legacy_unbound_union_fields = FALSE;
+  legacy_unbound_union_fields = FALSE, allow_hyphen_in_filename = FALSE;
 
 // Default code splitting mode is set to 'no splitting'.
 CodeGenHelper::split_type code_splitting_mode = CodeGenHelper::SPLIT_NONE;
@@ -373,6 +373,9 @@ static bool check_file_list(const char *file_name, module_struct *module_list,
 
 static boolean is_valid_asn1_filename(const char* file_name)
 {
+  if (allow_hyphen_in_filename)
+    return TRUE;
+
   // only check the actual file name, not the whole path
   const char* file_name_start = strrchr(file_name, '/');
   if (0 == strchr(file_name_start != NULL ? file_name_start : file_name, '-' )) {
@@ -384,7 +387,7 @@ static boolean is_valid_asn1_filename(const char* file_name)
 static void usage()
 {
   fprintf(stderr, "\n"
-    "usage: %s [-abcdEfgijlLOpqrRsStuwxXyY] [-K file] [-z file] [-V verb_level]\n"
+    "usage: %s [-abcdEfghijlLOpqrRsStuwxXyY] [-K file] [-z file] [-V verb_level]\n"
     "	[-o dir] [-U none|type] [-P modulename.top_level_pdu_name] [-Q number] ...\n"
     "	[-T] module.ttcn [-A] module.asn ...\n"
     "	or  %s -v\n"
@@ -399,6 +402,7 @@ static void usage()
     "	-E:		display only warnings for unrecognized encoding variants\n"
     "	-f:		force overwriting of output files\n"
     "	-g:		emulate GCC error/warning message format\n"
+    "	-h:             allow hyphen in file name\n"
     "	-i:		use only line numbers in error/warning messages\n"
     "	-j:		disable JSON encoder/decoder functions\n"
     "	-K file:	enable selective code coverage\n"
@@ -475,7 +479,7 @@ int main(int argc, char *argv[])
   bool
     Aflag = false,  Lflag = false, Yflag = false,
     Pflag = false, Tflag = false, Vflag = false, bflag = false,
-    cflag = false, fflag = false, iflag = false, lflag = false,
+    cflag = false, fflag = false, hflag = false, iflag = false, lflag = false,
     oflag = false, pflag = false, qflag = false, rflag = false, sflag = false,
     tflag = false, uflag = false, vflag = false, wflag = false, xflag = false,
     dflag = false, Xflag = false, Rflag = false, gflag = false, aflag = false,
@@ -531,6 +535,9 @@ int main(int argc, char *argv[])
       else if (0 == strcmp(argv[i], "-j")) {
         implicit_json_encoding = FALSE;
       }
+      else if (0 == strcmp(argv[i], "-h")) {
+        allow_hyphen_in_filename = TRUE;
+      }
       else if (0 == strcmp(argv[i], "-f")) {
         json_refs_for_all_types = FALSE;
       }
@@ -574,7 +581,7 @@ int main(int argc, char *argv[])
 
   if (!ttcn2json) {
     for ( ; ; ) {
-      int c = getopt(argc, argv, "aA:bBcC:dEfFgijK:lLMno:pP:qQ:rRsStT:uU:vV:wxXyYz:0-");
+      int c = getopt(argc, argv, "aA:bBcC:dEfFghijK:lLMno:pP:qQ:rRsStT:uU:vV:wxXyYz:0-");
       if (c == -1) break;
       switch (c) {
       case 'a':
@@ -639,6 +646,10 @@ int main(int argc, char *argv[])
       case 'g':
         SET_FLAG(g);
         gcc_compat = TRUE;
+        break;
+      case 'h':
+        SET_FLAG(h);
+        allow_hyphen_in_filename = TRUE;
         break;
       case 'i':
         SET_FLAG(i);

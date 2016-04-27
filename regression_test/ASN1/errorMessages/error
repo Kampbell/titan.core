@@ -14,7 +14,7 @@ function_compiler()
 {
 echo "Checking '$1' (expecting '$2')"
 if
-  $TTCN3_COMPILER ${ABS_SRC}/${1}.asn  2> ERROR_file
+  $TTCN3_COMPILER -h ${ABS_SRC}/${1}.asn  2> ERROR_file
     then Verdict="fail : Code generated for erroneous input"
     else
       if  
@@ -41,8 +41,8 @@ function_compiler Test15 "Circular reference"
 function_compiler Test16 "Circular reference"
 function_compiler Test17 "Circular reference"
 function_compiler Test18 "Duplicate assignment with identifier"
-function_compiler Test19_1 "A non-negative INTEGER value was expected for named bit"
-function_compiler Test19_2 "syntax error, +unexpected"
+function_compiler Test19-1 "A non-negative INTEGER value was expected for named bit"
+function_compiler Test19-2 "syntax error, +unexpected"
 function_compiler Test20 "is already assigned to"
 function_compiler Test21 "is already assigned to"
 function_compiler Test22 "Duplicate identifier: \`firstvalue'"

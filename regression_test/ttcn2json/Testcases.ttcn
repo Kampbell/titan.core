@@ -59,7 +59,7 @@ testcase tc_t2j_general_types() runs on Shell_CT
 
 testcase tc_t2j_main_asn() runs on Shell_CT
 {
-  f_test_ttcn2json("-f Main.ttcn PDU_Definitions.asn", "Main.json", "Main_e.json", 
+  f_test_ttcn2json("-h -f Main.ttcn PDU-Definitions.asn", "Main.json", "Main_e.json", 
     c_shell_successWithoutWarningAndError);
 }
 
